@@ -1,17 +1,22 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import NavOptions from './NavOptions'
+
+
+
 
 const NavBar = () => {
+  const options = ['Load', 'View Images']; 
   return (
-    <div className='p-10 text-lg '>
-    <nav className='bg-slate-600 rounded-lg navbar'>
-      
-    <label className=' text-3xl px-5 font-bold'>Infinite Images</label>
-    <label className=' hover:text-teal-400 hover:text-xl px-5'>Load</label>
-    <label className=' hover:text-teal-400 hover:text-xl px-5 '>View Images</label>
+    <div className='p-5'>
+    <nav className=' rounded-lg navbar font-semibold  text-sm shadow-lg shadow-indigo-500/50 font-mono  flex justify-between'>
+    <label className='text-lg px-5'>Infinite Images</label>
+    <NavOptions options={options}/>
+    
     
     </nav>
     </div>
+    
   )
 }
 
