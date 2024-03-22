@@ -4,6 +4,7 @@ import ImageGallery from "./components/ImageGallery";
 
 export default function Home() {
   return (
+
     <main>
     <header>
     <NavBar/>
@@ -12,5 +13,6 @@ export default function Home() {
     <ImageGallery/>
     </div>
     </main>
+    
   );
 }

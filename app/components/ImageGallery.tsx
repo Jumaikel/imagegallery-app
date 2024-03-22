@@ -45,7 +45,7 @@ const ImageGallery  = () => {
     <div>
       <div className="columns-4 gap-5 w-[1200px] mx-auto space-y-3 pb-28">
         {images.map(image => (
-          <div key={image.id} className='rounded-lg overflow-hidden'>
+          <div key={image.id} className='rounded-lg overflow-hidden hover:opacity-50 transition-opacity duration-300'>
             <Image
               src={image.webformatURL}
               alt={`Image ${image.id}`} 
