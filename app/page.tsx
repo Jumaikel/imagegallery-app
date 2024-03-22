@@ -9,7 +9,7 @@ export default function Home() {
     <header>
     <NavBar/>
     </header>
-    <div className="flex-container">
+    <div className="flex-container mx-6">
     <ImageGallery/>
     </div>
     </main>

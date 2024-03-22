@@ -17,6 +17,7 @@ const ImageGallery  = () => {
     const fetchImages = async () => {
       const apiKey = '43003817-5333e0e4f3c66f6765e525f97';
       const perPage = 15;
+      //const random = Math.floor(Math.random()*10); Random images (but a problem).
       const apiURL = `https://pixabay.com/api/?key=${apiKey}&orientation=vetical&per_page=${perPage}`;
 
       try {
@@ -43,7 +44,7 @@ const ImageGallery  = () => {
 
   return (
     <div>
-      <div className="columns-4 gap-5 w-[1200px] mx-auto space-y-3 pb-28">
+      <div className="columns-4 gap-5 w-auto mx-auto space-y-3 pb-28">
         {images.map(image => (
           <div key={image.id} className='rounded-lg overflow-hidden hover:opacity-50 transition-opacity duration-300'>
             <Image
