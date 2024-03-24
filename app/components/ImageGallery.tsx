@@ -11,13 +11,13 @@ interface ImageData {
 const ImageGallery = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [page, setPage] = useState(1);
-  const [scrollCount, setScrollCount] = useState(0); 
+  const [scrollCount, setScrollCount] = useState(0);
   const [maxScrolls, setMaxScrolls] = useState(20);
-  const imageGalleryRef = useRef<HTMLDivElement>(null); 
+  const imageGalleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchImages();
-  }, [ page]);
+  }, [page]);
 
   const fetchImages = async () => {
     if (scrollCount >= maxScrolls) return;
@@ -51,7 +51,7 @@ const ImageGallery = () => {
       current.addEventListener('scroll', handleScroll);
       return () => current.removeEventListener('scroll', handleScroll);
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -61,13 +61,13 @@ const ImageGallery = () => {
   }, []);
 
   return (
-    <div ref={imageGalleryRef} style={{ overflowY: 'auto', maxHeight: '600px' }}>
-       <Masonry
-       breakpointCols={{ 1100: 4, 800: 3,500: 2 }}
-       className="my-masonry-grid"
-       columnClassName="my-masonry-grid_column m-5"
-       style={{ display: 'flex', justifyContent: 'center' }}
-    >
+    <div ref={imageGalleryRef} style={{ overflowY: 'auto', maxHeight: '1080px' }}>
+      <Masonry
+        breakpointCols={{default:4, 1100: 4, 800: 3, 500: 2 }}
+        className="my-masonry-grid"
+        columnClassName="my-masonry-grid_column m-5"
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
         {lastImages.map(image => (
           <div key={image.id} className='masonry-item'>
             <Image

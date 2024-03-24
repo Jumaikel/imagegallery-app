@@ -6,13 +6,13 @@ export default function Home() {
   return (
 
     <main>
-    <header>
-    <NavBar/>
-    </header>
-    <div className="flex-container mx-6">
-    <ImageGallery/>
-    </div>
+      <header>
+        <NavBar />
+      </header>
+      <div className="flex-container mx-6">
+        <ImageGallery />
+      </div>
     </main>
-    
+
   );
 }
