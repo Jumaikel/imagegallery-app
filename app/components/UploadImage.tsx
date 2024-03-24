@@ -63,5 +63,3 @@ const UploadImage: React.FC = () => {
 };
 
 export default UploadImage;
-
-

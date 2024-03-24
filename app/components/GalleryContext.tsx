@@ -32,5 +32,3 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) =>
         </GalleryContext.Provider>
     );
 };
-
-

@@ -49,7 +49,7 @@ const SharedImages = () => {
     }, []);
 
     return (
-        <div style={{ overflowY: 'auto', maxHeight: '1080px' }}>
+        <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)'}}>
             <Masonry
                 breakpointCols={{ default: 4, 1100: 4, 800: 3, 500: 2 }}
                 className="my-masonry-grid"
