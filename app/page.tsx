@@ -1,18 +1,23 @@
-import Image from "next/image";
+"use client"
+
 import NavBar from "./components/NavBar";
+import SharedImages from "./components/SharedImages";
 import ImageGallery from "./components/ImageGallery";
+import { GalleryProvider } from './utils/GalleryContext';
 
-export default function Home() {
+const Home = () => {
   return (
-
-    <main>
-      <header>
-        <NavBar />
-      </header>
-      <div className="flex-container mx-6">
-        <ImageGallery />
-      </div>
-    </main>
-
+    <GalleryProvider>
+      <main>
+        <header>
+          <NavBar />
+        </header>
+        <div className="flex-container mx-6">
+          <ImageGallery />
+        </div>
+      </main>
+    </GalleryProvider>
   );
-}
+};
+
+export default Home;

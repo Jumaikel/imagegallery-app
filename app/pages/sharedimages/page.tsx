@@ -1,8 +1,8 @@
 "use client"
-import React from 'react';
-import { GalleryProvider } from '../../components/GalleryContext';
 import NavBar from "../../components/NavBar";
 import SharedImages from "../../components/SharedImages";
+import ImageGallery from "../../components/ImageGallery";
+import { GalleryProvider } from '../../utils/GalleryContext';
 
 const SharedImagesView: React.FC = () => {
     return (
@@ -10,11 +10,12 @@ const SharedImagesView: React.FC = () => {
             <header>
                 <NavBar />
             </header>
-            <div className="flex-container mx-6" >
-                <SharedImages/>
+            <div className="flex-container mx-6 font-mono" >
+                <SharedImages />
             </div>
         </GalleryProvider>
     );
 };
 
 export default SharedImagesView;
+

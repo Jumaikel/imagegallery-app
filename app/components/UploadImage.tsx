@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useGallery } from './GalleryContext';
+import { useGallery } from '../utils/GalleryContext';
 import { supabaseUrl, supabase } from '../utils/supabaseClient';
 import Image from 'next/image';
 
 const UploadImage: React.FC = () => {
-    const { addImage } = useGallery();
     const [imageUrl, setImageUrl] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploadMessage, setUploadMessage] = useState<string | null>(null);
@@ -24,7 +23,6 @@ const UploadImage: React.FC = () => {
             }
 
             if (data) {
-                addImage(data.path);
                 const fileUrl = `${supabaseUrl}/storage/v1/object/public/sharedimages/${data.path}`;
                 setImageUrl(fileUrl);
                 setSelectedFile(null);

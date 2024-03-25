@@ -1,21 +1,30 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { supabase, supabaseUrl } from '../utils/supabaseClient';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
+import { supabase, supabaseUrl } from '../utils/supabaseClient';
+import { useGallery } from '../utils/GalleryContext';
 
 interface ImageData {
-    id: string;
-    url: string;
+    id: number;
+    webformatURL: string;
 }
 
 const SharedImages = () => {
     const [images, setImages] = useState<ImageData[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string>('');
+    const { addImage, sharedImages } = useGallery();
 
     useEffect(() => {
         fetchImages();
     }, []);
+
+    useEffect(() => {
+        sharedImages.forEach(image => {
+            console.log("Adds:", image);
+        });
+
+    }, [sharedImages]);
 
     const fetchImages = async () => {
         try {
@@ -30,9 +39,14 @@ const SharedImages = () => {
             if (data && data.length > 0) {
                 const imageUrls = data.map((image: any) => ({
                     id: image.id,
-                    url: `${supabaseUrl}/storage/v1/object/public/sharedimages/${image.name}`
+                    webformatURL: `${supabaseUrl}/storage/v1/object/public/sharedimages/${image.name}`
                 }));
                 setImages(imageUrls);
+
+                imageUrls.forEach(image => {
+                    addImage(image);
+                    console.log("Image added:", image);
+                });
             } else {
                 setImages([]);
             }
@@ -55,19 +69,17 @@ const SharedImages = () => {
         try {
             const response = await fetch(selectedImage);
             const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            const webformatURL = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
+            a.href = webformatURL;
             a.download = 'image.jpg';
             document.body.appendChild(a);
             a.click();
-            window.URL.revokeObjectURL(url);
+            window.URL.revokeObjectURL(webformatURL);
         } catch (error) {
             console.error('Error downloading image:', error);
         }
     };
-
-    const memoizedImages = useMemo(() => images.slice(1), [images]);
 
     return (
         <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
@@ -77,15 +89,16 @@ const SharedImages = () => {
                 columnClassName="my-masonry-grid_column m-5"
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
-                {memoizedImages.map(image => (
+                {images.slice(1).map(image => (
                     <div key={image.id} className='masonry-item'>
                         <Image
-                            src={image.url}
+                            src={image.webformatURL}
                             alt={`Image ${image.id}`}
                             width={600}
                             height={400}
                             className='rounded-lg overflow-hidden hover:opacity-50 transition-opacity duration-300 m-2 cursor-pointer'
-                            onClick={() => openModal(image.url)}
+                            onClick={() => openModal(image.webformatURL)}
+                            priority
                         />
                     </div>
                 ))}
@@ -112,3 +125,4 @@ const SharedImages = () => {
 }
 
 export default SharedImages;
+

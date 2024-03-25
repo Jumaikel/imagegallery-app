@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+interface ImageData {
+    id: number;
+    webformatURL: string;
+}
+
 type GalleryContextType = {
-    images: string[];
-    addImage: (image: string) => void;
+    sharedImages: ImageData[];
+    addImage: (image: ImageData) => void;
 };
 
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
@@ -20,14 +25,14 @@ type GalleryProviderProps = {
 };
 
 export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) => {
-    const [images, setImages] = useState<string[]>([]);
+    const [sharedImages, setImages] = useState<ImageData[]>([]);
 
-    const addImage = (image: string) => {
-        setImages([...images, image]);
+    const addImage = (image: ImageData) => {
+        setImages([...sharedImages, image]);
     };
 
     return (
-        <GalleryContext.Provider value={{ images, addImage }}>
+        <GalleryContext.Provider value={{ sharedImages, addImage }}>
             {children}
         </GalleryContext.Provider>
     );

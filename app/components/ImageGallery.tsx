@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
+import { useGallery } from '../utils/GalleryContext';
 
 interface ImageData {
   id: number;
@@ -17,6 +18,12 @@ const ImageGallery = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
   const imageGalleryRef = useRef<HTMLDivElement>(null);
+
+  const { sharedImages } = useGallery();
+
+  useEffect(() => {
+    console.log("Shared Images:", sharedImages);
+  }, [sharedImages]);
 
   useEffect(() => {
     fetchImages();
@@ -35,7 +42,7 @@ const ImageGallery = () => {
     }
   };
 
-  const lastImages = useMemo(() => images, [images]);
+  const allImages = useMemo(() => [...sharedImages, ...images], [sharedImages, images]);
 
   const handleScroll = () => {
     const { current } = imageGalleryRef;
@@ -97,7 +104,7 @@ const ImageGallery = () => {
         columnClassName="my-masonry-grid_column m-5"
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        {lastImages.map(image => (
+        {allImages.map(image => (
           <div key={image.id} className='masonry-item'>
             <Image
               src={image.webformatURL}
