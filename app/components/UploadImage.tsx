@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGallery } from './GalleryContext';
 import { supabaseUrl, supabase } from '../utils/supabaseClient';
+import Image from 'next/image';
 
 const UploadImage: React.FC = () => {
     const { addImage } = useGallery();
@@ -46,7 +47,7 @@ const UploadImage: React.FC = () => {
             <input className='file-input w-full max-w-xs mb-3 mt-3'
                 type="file"
                 accept="image/*"
-                onChange={handleFileChange}/>
+                onChange={handleFileChange} />
             {selectedFile && (
                 <div className="flex justify-center">
                     <button onClick={handleFileUpload} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Upload</button>
@@ -55,7 +56,7 @@ const UploadImage: React.FC = () => {
             {uploadMessage && <p className="text-green-500">{uploadMessage}</p>}
             {imageUrl && (
                 <div className="flex justify-center ">
-                    <img src={imageUrl} alt="Uploaded" className="max-w-96 h-auto rounded-lg m-3" />
+                    <Image src={imageUrl} alt="Uploaded" className="max-w-96 h-auto rounded-lg m-3" width={600} height={400} />
                 </div>
             )}
         </div>

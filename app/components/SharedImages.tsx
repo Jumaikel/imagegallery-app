@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase, supabaseUrl } from '../utils/supabaseClient';
 import Image from 'next/image';
@@ -12,16 +11,22 @@ interface ImageData {
 const SharedImages = () => {
     const [images, setImages] = useState<ImageData[]>([]);
     const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchImages();
     }, [page]);
 
     const fetchImages = async () => {
+        setLoading(true);
         try {
             const { data, error } = await supabase.storage
                 .from('sharedimages')
-                .list('');
+                .list('', {
+                    limit: 12,
+                    offset: (page - 1) * 12,
+                });
 
             if (error) {
                 throw new Error(error.message);
@@ -32,12 +37,15 @@ const SharedImages = () => {
                     id: image.id,
                     url: `${supabaseUrl}/storage/v1/object/public/sharedimages/${image.name}`
                 }));
-                setImages(imageUrls);
+                setImages(prevImages => [...prevImages, ...imageUrls]);
+                setPage(prevPage => prevPage + 1);
             } else {
-                setImages([]);
+                setHasMore(false);
             }
         } catch (error: any) {
             console.error('Error getting images:', error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -48,17 +56,23 @@ const SharedImages = () => {
         };
     }, []);
 
+    const handleLoadMore = () => {
+        if (!loading && hasMore) {
+            fetchImages();
+        }
+    };
+
     return (
-        <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)'}}>
+        <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
             <Masonry
                 breakpointCols={{ default: 4, 1100: 4, 800: 3, 500: 2 }}
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column m-5"
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
-                {images.slice(1).map(image => (
+                {images.map(image => (
                     <div key={image.id} className='masonry-item'>
-                        <img
+                        <Image
                             src={image.url}
                             alt={`Image ${image.id}`}
                             width={600}
@@ -67,8 +81,13 @@ const SharedImages = () => {
                         />
                     </div>
                 ))}
-            </Masonry >
-        </div >
+            </Masonry>
+            {!hasMore && (
+                <div className="text-center mt-4 text-gray-500">
+                    No more images available.
+                </div>
+            )}
+        </div>
     );
 }
 
