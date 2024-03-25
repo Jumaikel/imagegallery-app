@@ -11,7 +11,7 @@ const LoadImages: React.FC = () => {
                 <NavBar />
             </header>
             <div className="flex-container mx-6 pb-6 text-center" >
-                <h1>Load Images</h1>
+                <h1>Load Image</h1>
                 <UploadImage />
             </div>
         </GalleryProvider>

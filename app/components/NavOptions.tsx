@@ -17,7 +17,7 @@ const NavOptions: React.FC<{ options: Option[] }> = ({ options }) => {
               {option.label}
             </div>
           ) : (
-            <div className="hover:text-cyan-300 shadow-indigo-500 hover:rounded-lg px-5 transition-colors duration-300 cursor-pointer">
+              <div className="hover:text-cyan-300 shadow-indigo-500 hover:rounded-lg px-5 transition-colors duration-300 cursor-pointer">
               {option.label}
             </div>
           )}

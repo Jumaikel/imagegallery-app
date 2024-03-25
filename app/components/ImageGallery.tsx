@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
@@ -13,6 +14,8 @@ const ImageGallery = () => {
   const [page, setPage] = useState(1);
   const [scrollCount, setScrollCount] = useState(0);
   const [maxScrolls, setMaxScrolls] = useState(20);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const imageGalleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,10 +63,36 @@ const ImageGallery = () => {
     };
   }, []);
 
+  const openModal = (imageUrl: string) => {
+    setShowModal(true);
+    setSelectedImage(imageUrl);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedImage('');
+  };
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(selectedImage);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'image.jpg';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading image:', error);
+    }
+  };
+
   return (
-    <div ref={imageGalleryRef} style={{ overflowY: 'auto', maxHeight: '1080px' }}>
+    <div ref={imageGalleryRef} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
       <Masonry
-        breakpointCols={{default:4, 1100: 4, 800: 3, 500: 2 }}
+        breakpointCols={{ default: 4, 1100: 4, 800: 3, 500: 2 }}
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column m-5"
         style={{ display: 'flex', justifyContent: 'center' }}
@@ -75,12 +104,28 @@ const ImageGallery = () => {
               alt={`Image ${image.id}`}
               width={600}
               height={400}
-              className='rounded-lg overflow-hidden hover:opacity-50 transition-opacity duration-300 m-2'
+              className='rounded-lg overflow-hidden hover:opacity-50 transition-opacity duration-300 m-2 cursor-pointer'
+              onClick={() => openModal(image.webformatURL)}
             />
           </div>
         ))}
       </Masonry>
 
+      {showModal && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="max-w-3xl max-h-screen overflow-auto text-center">
+            <Image
+              src={selectedImage}
+              alt="Selected Image"
+              width={600}
+              height={400}
+              className="rounded-lg overflow-hidden"
+            />
+            <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full mt-3 mr-3" onClick={handleDownload}>Download</button>
+            <button className="bg-white hover:bg-gray-500 hover:text-white text-indigo-500 font-bold py-2 px-4 rounded-full mt-3" onClick={closeModal}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

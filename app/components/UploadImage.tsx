@@ -5,9 +5,10 @@ import Image from 'next/image';
 
 const UploadImage: React.FC = () => {
     const { addImage } = useGallery();
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const handleFileUpload = async () => {
         if (!selectedFile) return;
@@ -39,24 +40,52 @@ const UploadImage: React.FC = () => {
         const file = e.target.files?.[0];
         if (file) {
             setSelectedFile(file);
+            setImageUrl('');
+            setUploadMessage(null);
         }
     };
 
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
     return (
-        <div className="text-center" >
-            <input className='file-input w-full max-w-xs mb-3 mt-3'
+        <div className="text-center">
+            <input
+                className='file-input w-full max-w-xs mb-3 mt-3'
                 type="file"
                 accept="image/*"
-                onChange={handleFileChange} />
+                onChange={handleFileChange}
+            />
             {selectedFile && (
                 <div className="flex justify-center">
-                    <button onClick={handleFileUpload} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Upload</button>
+                    <button
+                        onClick={handleFileUpload}
+                        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                    >
+                        Upload
+                    </button>
                 </div>
             )}
             {uploadMessage && <p className="text-green-500">{uploadMessage}</p>}
             {imageUrl && (
-                <div className="flex justify-center ">
-                    <Image src={imageUrl} alt="Uploaded" className="max-w-96 h-auto rounded-lg m-3" width={600} height={400} />
+                <div className="flex justify-center">
+                    <div
+                        className='rounded-lg overflow-hidden m-2'
+                        onClick={openModal}
+                    >
+                        <Image
+                            src={imageUrl}
+                            alt="Uploaded"
+                            width={600}
+                            height={400}
+                            priority
+                        />
+                    </div>
                 </div>
             )}
         </div>
@@ -64,3 +93,4 @@ const UploadImage: React.FC = () => {
 };
 
 export default UploadImage;
+
