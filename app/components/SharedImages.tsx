@@ -11,22 +11,16 @@ interface ImageData {
 const SharedImages = () => {
     const [images, setImages] = useState<ImageData[]>([]);
     const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchImages();
     }, [page]);
 
     const fetchImages = async () => {
-        setLoading(true);
         try {
             const { data, error } = await supabase.storage
                 .from('sharedimages')
-                .list('', {
-                    limit: 12,
-                    offset: (page - 1) * 12,
-                });
+                .list('');
 
             if (error) {
                 throw new Error(error.message);
@@ -37,15 +31,12 @@ const SharedImages = () => {
                     id: image.id,
                     url: `${supabaseUrl}/storage/v1/object/public/sharedimages/${image.name}`
                 }));
-                setImages(prevImages => [...prevImages, ...imageUrls]);
-                setPage(prevPage => prevPage + 1);
+                setImages(imageUrls);
             } else {
-                setHasMore(false);
+                setImages([]);
             }
         } catch (error: any) {
             console.error('Error getting images:', error.message);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -56,21 +47,17 @@ const SharedImages = () => {
         };
     }, []);
 
-    const handleLoadMore = () => {
-        if (!loading && hasMore) {
-            fetchImages();
-        }
-    };
+    const memoizedImages = useMemo(() => images.slice(1), [images]);
 
     return (
-        <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 100px)' }}>
+        <div style={{ overflowY: 'auto', maxHeight: '1080px' }}>
             <Masonry
                 breakpointCols={{ default: 4, 1100: 4, 800: 3, 500: 2 }}
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column m-5"
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
-                {images.map(image => (
+                {memoizedImages.map(image => (
                     <div key={image.id} className='masonry-item'>
                         <Image
                             src={image.url}
@@ -81,13 +68,8 @@ const SharedImages = () => {
                         />
                     </div>
                 ))}
-            </Masonry>
-            {!hasMore && (
-                <div className="text-center mt-4 text-gray-500">
-                    No more images available.
-                </div>
-            )}
-        </div>
+            </Masonry >
+        </div >
     );
 }
 
