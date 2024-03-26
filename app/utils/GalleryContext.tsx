@@ -1,39 +1,34 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+"use client"
+import { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
 
 interface ImageData {
-    id: number;
-    webformatURL: string;
+  id: number;
+  webformatURL: string;
 }
 
-type GalleryContextType = {
-    sharedImages: ImageData[];
-    addImage: (image: ImageData) => void;
-};
+interface ContextProps {
+  imageData: ImageData[];
+  setImageData: Dispatch<SetStateAction<ImageData[]>>;
+}
 
-const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
+const GlobalContext = createContext<ContextProps>({
+  imageData: [],
+  setImageData: () => {}
+});
 
-export const useGallery = () => {
-    const context = useContext(GalleryContext);
-    if (!context) {
-        throw new Error('useGallery must be used within a GalleryProvider');
-    }
-    return context;
-};
+type GlobalContextProviderProps = {
 
-type GalleryProviderProps = {
     children: React.ReactNode;
+}
+
+export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({ children }) => {
+  const [imageData, setImageData] = useState<ImageData[]>([]);
+
+  return (
+    <GlobalContext.Provider value={{ imageData, setImageData }}>
+      {children}
+    </GlobalContext.Provider>
+  );
 };
 
-export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) => {
-    const [sharedImages, setImages] = useState<ImageData[]>([]);
-
-    const addImage = (image: ImageData) => {
-        setImages([...sharedImages, image]);
-    };
-
-    return (
-        <GalleryContext.Provider value={{ sharedImages, addImage }}>
-            {children}
-        </GalleryContext.Provider>
-    );
-};
+export const useGallery = () => useContext(GlobalContext);

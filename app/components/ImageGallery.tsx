@@ -21,11 +21,11 @@ const ImageGallery = () => {
   const [selectedImage, setSelectedImage] = useState<string>('');
   const imageGalleryRef = useRef<HTMLDivElement>(null);
 
-  const { sharedImages } = useGallery();
+  const { imageData } = useGallery();
 
   useEffect(() => {
-    console.log("Shared Images:", sharedImages);
-  }, [sharedImages]);
+    console.log("Shared Images:",imageData);
+  }, [imageData]);
 
   useEffect(() => {
     fetchImages();
@@ -44,7 +44,7 @@ const ImageGallery = () => {
     }
   };
 
-  const allImages = useMemo(() => [...sharedImages, ...images], [sharedImages, images]);
+  const allImages = useMemo(() => [...imageData, ...images], [imageData, images]);
 
   const handleScroll = () => {
     const { current } = imageGalleryRef;
@@ -106,7 +106,7 @@ const ImageGallery = () => {
         columnClassName="my-masonry-grid_column m-5"
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        {allImages.map(image => (
+        {allImages.slice(1).map(image => (
           <div key={image.id} className='masonry-item'>
             <Image
               src={image.webformatURL}

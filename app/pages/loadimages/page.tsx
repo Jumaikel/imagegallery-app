@@ -1,12 +1,11 @@
 "use client"
 import React from 'react';
 import UploadImage from '../../components/UploadImage';
-import { GalleryProvider } from '../../utils/GalleryContext';
 import NavBar from "../../components/NavBar";
 
 const LoadImages: React.FC = () => {
     return (
-        <GalleryProvider>
+        <div>
             <header>
                 <NavBar />
             </header>
@@ -14,7 +13,7 @@ const LoadImages: React.FC = () => {
                 <h1>Load Image</h1>
                 <UploadImage />
             </div>
-        </GalleryProvider>
+        </div>
     );
 };
 

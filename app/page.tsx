@@ -3,11 +3,11 @@
 import NavBar from "./components/NavBar";
 import SharedImages from "./components/SharedImages";
 import ImageGallery from "./components/ImageGallery";
-import { GalleryProvider } from './utils/GalleryContext';
+
 
 const Home = () => {
   return (
-    <GalleryProvider>
+   
       <main>
         <header>
           <NavBar />
@@ -16,7 +16,7 @@ const Home = () => {
           <ImageGallery />
         </div>
       </main>
-    </GalleryProvider>
+    
   );
 };
 

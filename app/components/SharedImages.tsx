@@ -17,18 +17,18 @@ const SharedImages = () => {
     const [images, setImages] = useState<ImageData[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string>('');
-    const { addImage, sharedImages } = useGallery();
+    const { setImageData, imageData } = useGallery();
 
     useEffect(() => {
         fetchImages();
     }, []);
 
     useEffect(() => {
-        sharedImages.forEach(image => {
+        imageData.forEach(image => {
             console.log("Adds:", image);
         });
 
-    }, [sharedImages]);
+    }, [imageData]);
 
     const fetchImages = async () => {
         try {
@@ -47,10 +47,7 @@ const SharedImages = () => {
                 }));
                 setImages(imageUrls);
 
-                imageUrls.forEach(image => {
-                    addImage(image);
-                    console.log("Image added:", image);
-                });
+                setImageData(imageUrls);
             } else {
                 setImages([]);
             }
