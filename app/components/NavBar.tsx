@@ -21,8 +21,7 @@ const NavBar = () => {
   return (
     <div className="mb-3">
       <nav className="rounded-lg font-semibold shadow-lg shadow-black/50 font-mono flex justify-between items-center p-2 sm:p-4 bg-gradient-to-r from-black to-blue-950">
-        <Link href="/">
-          <div className="flex items-center space-x-2 sm:space-x-3 cursor-pointer">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <Image
               src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
               alt="Logo"
@@ -39,7 +38,6 @@ const NavBar = () => {
               </h5>
             </div>
           </div>
-        </Link>
         <NavOptions options={options} />
       </nav>
     </div>
