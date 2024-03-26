@@ -1,8 +1,12 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
 import { supabase, supabaseUrl } from '../utils/supabaseClient';
 import { useGallery } from '../utils/GalleryContext';
+import ModalButtons from './ModalButtons';
+import ModalImage from './ModalImage';
 
 interface ImageData {
     id: number;
@@ -103,22 +107,13 @@ const SharedImages = () => {
                     </div>
                 ))}
             </Masonry >
-
             {showModal && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="max-w-3xl max-h-screen overflow-auto text-center">
-                        <Image
-                            src={selectedImage}
-                            alt="Selected Image"
-                            layout="responsive"
-                            width={600}
-                            height={400}
-                            className="rounded-lg overflow-hidden"
-                        />
-                        <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full mt-3 mr-3" onClick={handleDownload}>Download</button>
-                        <button className="bg-white hover:bg-gray-500 hover:text-white text-indigo-500 font-bold py-2 px-4 rounded-full mt-3" onClick={closeModal}>Close</button>
-                    </div>
-                </div>
+                <ModalImage
+                    src={selectedImage}
+                    alt="Selected Image"
+                    onDownload={handleDownload}
+                    onClose={closeModal}
+                />
             )}
         </div>
     );
