@@ -1,26 +1,26 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 type Option = {
   label: string;
   href: string;
   primary: boolean;
 };
-
 const NavOptions: React.FC<{ options: Option[] }> = ({ options }) => {
   return (
-    <div className="flex space-x-4 text-base">
+    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 text-base my-2">
       {options.map((option, index) => (
-        <Link key={index} href={option.href} passHref>
-          {option.primary ? (
-            <div className="text-indigo-500 hover:text-cyan-300 hover:rounded-lg px-5 transition-colors duration-300 cursor-pointer">
-              {option.label}
-            </div>
-          ) : (
-              <div className="hover:text-cyan-300 shadow-indigo-500 hover:rounded-lg px-5 transition-colors duration-300 cursor-pointer">
-              {option.label}
-            </div>
-          )}
+        <Link
+        key={index}
+        href={option.href}
+        className={`border border-gray-700 ${
+          option.label === "Load My Own Images"
+            ? "bg-blue-950 text-white"
+            : "text-gray-400 hover:text-gray-200 hover:border-gray-500"
+        } rounded-lg px-5 py-1 transition-colors duration-300 cursor-pointer w-full sm:w-auto text-center`}
+        passHref
+        >
+          {option.label}
         </Link>
       ))}
     </div>

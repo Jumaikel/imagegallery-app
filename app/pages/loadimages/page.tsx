@@ -9,10 +9,12 @@ const LoadImages: React.FC = () => {
             <header>
                 <NavBar />
             </header>
-            <div className="flex-container mx-6 pb-6 text-center font-mono" >
-                <h1>Load Image</h1>
+            <div className="mx-6 pb-6 text-center">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-blue-950 dark:text-amber-600 my-4">
+                    Load Image
+                </h1>
                 <UploadImage />
-            </div>
+                </div>
         </div>
     );
 };
