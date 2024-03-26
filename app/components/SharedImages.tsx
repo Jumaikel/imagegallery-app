@@ -1,11 +1,8 @@
-"use client"
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import Masonry from 'react-masonry-css';
 import { supabase, supabaseUrl } from '../utils/supabaseClient';
 import { useGallery } from '../utils/GalleryContext';
-import ModalButtons from './ModalButtons';
 import ModalImage from './ModalImage';
 
 interface ImageData {
@@ -17,18 +14,11 @@ const SharedImages = () => {
     const [images, setImages] = useState<ImageData[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string>('');
-    const { setImageData, imageData } = useGallery();
+    const { setImageData } = useGallery();
 
     useEffect(() => {
         fetchImages();
     }, []);
-
-    useEffect(() => {
-        imageData.forEach(image => {
-            console.log("Adds:", image);
-        });
-
-    }, [imageData]);
 
     const fetchImages = async () => {
         try {
@@ -46,7 +36,6 @@ const SharedImages = () => {
                     webformatURL: `${supabaseUrl}/storage/v1/object/public/sharedimages/${image.name}`
                 }));
                 setImages(imageUrls);
-
                 setImageData(imageUrls);
             } else {
                 setImages([]);
@@ -55,6 +44,8 @@ const SharedImages = () => {
             console.error('Error getting images:', error.message);
         }
     };
+
+    const memoizedImages = useMemo(() => images.slice(1), [images]);
 
     const openModal = (imageUrl: string) => {
         setShowModal(true);
@@ -90,7 +81,7 @@ const SharedImages = () => {
                 columnClassName="my-masonry-grid_column m-5"
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
-                {images.slice(1).map(image => (
+                {memoizedImages.map(image => (
                     <div key={image.id} className='masonry-item'>
                         <Image
                             src={image.webformatURL}
@@ -103,7 +94,7 @@ const SharedImages = () => {
                         />
                     </div>
                 ))}
-            </Masonry >
+            </Masonry>
             {showModal && (
                 <ModalImage
                     src={selectedImage}
@@ -117,4 +108,3 @@ const SharedImages = () => {
 }
 
 export default SharedImages;
-
